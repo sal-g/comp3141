@@ -15,6 +15,7 @@ housePic = [door, house]
     house = Path (floatToPoint houseCOs) green Solid
     door :: PictureObject
     door  = Path (floatToPoint doorCOs) red Solid
+
 -- these are the coordinates - convert them to a list of Point
 houseCOs :: [(Float, Float)]
 houseCOs = [(300, 750), (300, 450), (270, 450), (500, 200),
@@ -52,15 +53,27 @@ movePoint :: Point -> Vector -> Point
 movePoint (Point x y) (Vector xv yv)
   = Point (x + xv) (y + yv)
 
+-- Takes in a list of Points and a vector 
 movePoints :: [Point] -> Vector -> [Point]
-movePoints (p:ps) vec = map (movePoint p vec) ps
+movePoints ps vec = map (\p -> movePoint p vec) ps
 
 movePictureObject :: Vector -> PictureObject -> PictureObject
-movePictureObject vec (Path points colour lineStyle) = Path (map movePoint points vec) colour lineStyle
+movePictureObject vec (Path points colour lineStyle) = Path (movePoints points vec) colour lineStyle
 -- = error "'movePictureObject' unimplemented"
 
 -- add other cases
+-- Circle
 movePictureObject vec (Circle center radius colour lineStyle fillStyle) = Circle (movePoint center vec) radius colour lineStyle fillStyle
+-- Ellipse
+movePictureObject vec (Ellipse center width height rotation colour lineStyle fillStyle) = Ellipse (movePoint center vec) width height rotation colour lineStyle fillStyle
+-- Polygon
+movePictureObject vec (Polygon points colour lineStyle fillStyle) = Polygon (movePoints points vec) colour lineStyle fillStyle
+
+-- Testing Part 2 sample input
+-- myRed = red { opacityC = 180 }
+-- xy = (Point 400 400)
+-- circ = Circle xy 100 myRed Solid SolidFill
+-- v = (Vector 100 100)
 
 
 -- Part 3
@@ -71,9 +84,18 @@ movePictureObject vec (Circle center radius colour lineStyle fillStyle) = Circle
 --  Circle (Point 400 400) 2 * (400/n) col Solid SolidFill,
 --  ....
 --  Circle (Point 400 400) 400 col Solid SolidFill]
-simpleCirclePic :: Colour -> Float -> Picture
-simpleCirclePic col n = error "'simpleCirclePic' unimplemented"
 
+-- can't tab lmao
+simpleCirclePic :: Colour -> Float -> Picture
+simpleCirclePic col n = circles 
+ where
+ circle :: Float -> PictureObject
+ circle i = Circle (Point 400 400) (i * 400/n) col Solid SolidFill
+ circles :: Picture
+ circles = map circle [1,2..n]
+
+lowOpacityColour :: Colour
+lowOpacityColour = Colour 153 0 153 100
 
 -- use 'writeToFile' to write a picture to file "ex01.png" to test your
 -- program if you are not using Haskell for Mac
