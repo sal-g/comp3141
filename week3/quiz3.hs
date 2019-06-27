@@ -1,7 +1,7 @@
--- Question 1 [all]
-import Data.Char(toUpper, isAlpha,ord)
+import Data.Char(toUpper,isAlpha,ord)
 import Data.List(sort, nub)
 
+-- Question 1 [1,2,3,5,7]
 rot13 :: String -> String
 rot13 = map $ \x -> 
           case lookup x table of
@@ -11,15 +11,14 @@ rot13 = map $ \x ->
     table = table' 'A' 'Z' ++ table' 'a' 'z'
     table' a z = zip [a..z] (drop 13 (cycle [a..z]))
 
--- Question 2 [all]
-
+-- Question 2 [1,2,3,4,6]
 merge :: (Ord a) => [a] -> [a] -> [a]
 merge (x:xs) (y:ys) | x < y     = x:merge xs (y:ys)
                     | otherwise = y:merge (x:xs) ys
 merge xs [] = xs
 merge [] ys = ys
 
--- Question 3 [1,3,4,5]
+-- Question 3 [1,4]
 toBinary :: Int -> String
 toBinary 0 = ""
 toBinary n = let (d,r) = n `divMod` 2
@@ -33,7 +32,7 @@ fromBinary = fst . foldr eachChar (0,1)
     eachChar '1' (sum, m) = (sum + m, m*2)
     eachChar _   (sum, m) = (sum    , m*2)
 
--- Question 4 [all]
+-- Question 4 [1,2,3,6]
 dedup :: (Eq a) => [a] -> [a]
 dedup (x:y:xs) | x == y = dedup (y:xs)
                | otherwise = x : dedup (y:xs)
@@ -67,14 +66,12 @@ prop_1 xs = foo xs id == xs
 prop_2 :: [Int] -> (Int -> Int) -> (Int -> Int) -> Bool
 prop_2 xs f g = foo (foo xs f) g == foo xs (g . f)
 
--- Question 6 [def not 3,4,5,6]
+-- Question 6 [2, 4]
 bar :: [Int] -> [Int]
-bar xs = go xs []
-  where go []     acc = acc
-        go (x:xs) acc = go xs (x:acc) -- Option 2
--- bar []     = []
--- bar (x:xs) =      bar (filter (<=x) xs)
-           -- ++ x : bar (filter (> x) xs) -- Option 1
+bar = id -- Option 4 id is identity function
+-- bar xs = go xs []
+--   where go []     acc = acc
+--         go (x:xs) acc = go xs (x:acc) -- Option 2
 -- bar = undefined
 
 prop_3 :: [Int] -> Bool
@@ -86,7 +83,7 @@ prop_4 xs = length xs == length (bar xs)
 prop_5 :: [Int] -> (Int -> Int) -> Bool
 prop_5 xs f = bar (map f xs) == map f (bar xs)
 
--- Question 7 [either 1 or 2]
+-- Question 7 [1]
 baz :: [Integer] -> Integer
 baz = foldr (+) 0 -- Option 1
 -- baz []     = 0
