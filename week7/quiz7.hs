@@ -66,3 +66,6 @@ matching5 xs = fst (runState (go xs) 0)
                                if n > 0 then put (n - 1) >> go xs
                                         else pure False
               | otherwise = go xs 
+
+adder :: Int -> Int
+adder x = 
